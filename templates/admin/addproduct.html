@@ -1,0 +1,59 @@
+{% extends 'admin/admin_base.html'%}
+{% block content %}
+<div class="app-wrapper ">   
+    <div class="app-content pt-3 p-md-3 p-lg-4">
+        <h1 class="text-center pb-3 fw-bold" >ADD PRODUCT</h1>
+        <form class="container">
+            <div class="row">
+              <div class="col-md-6 my-3">
+                <label for="inputname" class="fw-bold">Product Name</label>
+                <input type="text" class="form-control" placeholder="Enter email" name="p_name">
+              </div>
+              <div class="col-md-6 my-3">
+                <label for="inputname" class="fw-bold">description</label>
+                <input type="text" class="form-control" placeholder="description" name="desc">
+              </div>
+              <div class="col-md-6 my-3">
+                <label for="inputname" class="fw-bold">price</label>
+                <input type="text" class="form-control" placeholder="price" name="price">
+              </div>
+              <div class="col-md-6 my-3">
+                <label for="inputname" class="fw-bold">stock</label>
+                <input type="text" class="form-control" placeholder="stock" name="stock">
+              </div>
+              <div class="col-md-6 my-3">
+                <label for="inputname" class="fw-bold">select catogary</label>
+                <select class="form-select" aria-label="Default select example" name="category">
+                    <option selected>Select One</option>
+                    
+                </select>
+                <div class="form-group my-3">
+                    <label for="inputname" class="fw-bold">Brand</label>
+                    <input type="text" class="form-control mt-1" id="brand" name="brand"
+                        placeholder="brand ">
+                </div>
+                <div class="form-group my-3">
+                    <label for="input_product_status" class="fw-bold">product_status</label>
+                    <select class="form-select" aria-label="Default select example" name="product_status">
+                        <option selected value="True">True</option>
+                        <option value="False">False</option>
+                    </select>
+                </div>              </div>
+                <div class="form-group col-md-6 my-3">
+                    <label for="input_product_status" class="fw-bold mb-2">Upload Images</label><br>
+                    <span class="imageupload">Image1 : </span><input type="file" class="form-control my-2" name="uploadFromPC" id="id_product_image">
+                    <span class="imageupload">Image2 : </span><input type="file" class="form-control my-1" name="uploadFromPC1"
+                        id="id_product_image1">
+                    <span class="imageupload">Image3 : </span> <input type="file" class="form-control my-1" name="uploadFromPC2"
+                        id="id_product_image2">
+                </div>
+            </div>
+            <div class="col-md-12  mt-3 ">
+                <button type="submit" id="confirm-btn" class="btn btn-success btn-lg px-6">Submit</button>
+            </div>
+          </form>
+
+    </div>
+</div>
+
+{% endblock content %}

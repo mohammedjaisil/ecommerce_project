@@ -1,0 +1,40 @@
+{% extends 'admin/admin_base.html'%}
+{% block content %}
+{% load static %}
+
+<div class="app-wrapper">
+    
+	    
+    <div class="app-content pt-3 p-md-3 p-lg-4">
+        <div class="container mt-3 text-center">
+            <h2>products</h2>
+            <div class="text-end">
+                <a href="{% url 'add_product'%}"><button type="submit" class="btn btn-outline-success btn-lg px-3 mb-2">Add Product</button></a>
+              </div>
+                     
+            <table class="table table-dark table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Sl/No</th>
+                  <th scope="col">Product Name</th>
+                  <th scope="col">Catogary</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Stock</th>
+                  <th style="width: 180px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                
+               
+              </tbody>
+            </table>
+          </div>
+    </div>
+    
+</div><!--//app-wrapper-->    					
+
+ 
+
+
+
+{% endblock content %}
