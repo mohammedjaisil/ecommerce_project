@@ -40,10 +40,10 @@ class AccountManager(BaseUserManager):
 
 class Accounts(AbstractUser):
     first_name = models.CharField(max_length=50, null = True)
-    last_name = models.CharField(max_length=50, null= True)
-    username = models.CharField(max_length=50, unique=True)
-    email = models.EmailField(unique=True,max_length=200)
-    phone = models.CharField(max_length=15,unique=True)
+    last_name  = models.CharField(max_length=50, null= True)
+    username   = models.CharField(max_length=50, unique=True)
+    email      = models.EmailField(unique=True,max_length=200)
+    phone      = models.CharField(max_length=15,unique=True)
 
 
 #required
