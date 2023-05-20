@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="apple-touch-icon" href="assets/img/apple-icon.png">
-    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="">
 
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css'%}">
     <link rel="stylesheet" href="{% static 'assets/css/templatemo.css'%}">
@@ -75,9 +75,16 @@ https://templatemo.com/tm-559-zay-shop
                         <i class="fa fa-fw fa-user text-dark mr-3"></i>
                         <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">+99</span>
                     </a>
+                    {% if user != None %}
+                    <a class="nav-icon position-relative text-decoration-none nav-link" href="{% url 'profile' %}">
+                        <p>HI <span class="fw-bold text-uppercase"><u>{{ user.username }}</u></span></p>
+                    </a>
+                    {% else %}
                     <a class="nav-icon position-relative text-decoration-none nav-link" href="{% url 'login' %}">
                         <span>Login</span>
                     </a>
+                    {% endif %}
+                    
                 </div>
                 
             </div>
