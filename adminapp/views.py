@@ -43,6 +43,9 @@ def admin_logout(request):
 def catogary(request):
     return render(request,'admin/catogary.html')
 
+def addcatogary(request):
+    return render(request,'admin/addcategory.html')
+
 def coupen(request):
     return render(request,'admin/coupen.html')
 
@@ -63,4 +66,14 @@ def sales(request):
     return render(request,'admin/sales.html')
 
 def user_management(request):
-    return render(request,'admin/user_management.html')
+    if 'admin_id' in request.session:
+        item  =Accounts.objects.all().order_by('-id')
+        return render(request,'admin/user_management.html',{'data':item})
+def blockuser(request,id):
+    item = Accounts.objects.get(id = id)
+    if item.is_active  :
+        item.is_active = False
+    else:
+        item.is_active = True
+    item.save()
+    return redirect(user_management)

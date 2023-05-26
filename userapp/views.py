@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from accounts .models import Accounts,CustomerAdress
+from productapp .models import Catogary,Product
 from django.contrib.auth import authenticate
 
 
@@ -39,7 +40,6 @@ def login(request):
                 messages.error(request,'your account got blocked')
                 return redirect(login)
             user = authenticate(username = username ,password = password)
-            print(type(user))
             if user is not None:
                 request.session['user_id']=username
                 return redirect(index)
@@ -229,3 +229,11 @@ def profile_edit(request):
                 return render(request,'user/profile_edit.html', {'data' : item})
             
         
+def selectedviews(request,value):
+    catogary = Catogary.objects.all()
+    
+    
+    context = {
+        'catogary' : catogary
+    }
+    return render(request,'user/index.html', context)

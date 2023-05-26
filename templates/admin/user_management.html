@@ -1,4 +1,110 @@
 {% extends 'admin/admin_base.html'%}
 {% block content %}
+<div class="app-wrapper">
+    
+	    
+    <div class="app-content pt-3 p-md-3 p-lg-4">
+        <div class="container mt-3 text-center">
+            <h2>USERS</h2>
+            <div class="text-end" style="width: 200px;">
+              <div class="flex-sm-fill mt-3 mb-4 col-7 col-sm-auto ">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="inputMobileSearch" placeholder="Search ...">
+                    <div class="input-group-text">
+                        <i class="fa fa-fw fa-search"></i>
+                    </div>
+                </div>
+            </div>
+            </div>
+              </div>
+                     
+            <table class="table table-dark table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">User_id</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">Status</th>
+                  <th style="width: 180px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in data%}
+                {% if i.is_admin != True %}
+                <tr>
+                    <th>{{ forloop.counter }}</th>
+                    <th scope="row">{{i.username}}</th>
+                    <th scope="col">{{i.email}}</th>
+                    <th scope="col">{{i.phone}}</th>
+                    <th scope="col">{{i.is_active}}</th>
+                    {% if i.is_active %}
+                    <td> <form action="{% url 'blockuser' i.id %}"method="POST">
+                      {% csrf_token %}
+                      <!-- Button trigger modal -->
+                      <button type="button" class="btn btn-outline-danger px-4" data-bs-toggle="modal" data-bs-target="#blockuser-{{ i.id }}">
+                        Block
+                      </button>
+        
+                      <!-- Modal -->
+                      <div class="modal fade" id="blockuser-{{ i.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <p style="color: black !important;">Do you want to block  {{ i.username }}</p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <a href="{% url 'blockuser' i.id %}"><button type="button" class="btn btn-danger">Confirm</button></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      </form>
+                    </td>
+                    {% else %}
+                    <td> <form action="{% url 'blockuser' i.id %}"method="POST">
+                      {% csrf_token %}
+                      <!-- Button trigger modal -->
+                      <button type="button" class="btn btn-outline-primary px-3" data-bs-toggle="modal" data-bs-target="#blockuser-{{ i.id }}">
+                        Unblock
+                      </button>
+        
+                      <!-- Modal -->
+                      <div class="modal fade" id="blockuser-{{ i.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <p style="color: black !important;">Do you want to Unblock  {{ i.username }}</p>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <a href="{% url 'blockuser' i.id %}"><button type="button" class="btn btn-success">Confirm</button></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      </form>
+                    </td>
+                    {% endif %}
+                  </tr>
+               
+              </tbody>
+              {% endif %}
+              {% endfor %}
+            </table>
+
+          </div>
+    </div>
+    
+</div><!--//app-wrapper-->    					
 
 {% endblock content %}

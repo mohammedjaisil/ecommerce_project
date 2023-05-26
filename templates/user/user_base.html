@@ -50,6 +50,16 @@ https://templatemo.com/tm-559-zay-shop
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'home' %}">Home</a>
                         </li>
+                        <li class="nav-link">
+                            <div class="dropdown">
+                                <a class="dropdown-toggle text-decoration-none" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Categories
+                                  </a>
+                                <ul class="dropdown-menu"> 
+                                    <li><a class="dropdown-item" href=""></a></li>
+                                </ul>
+                              </div>
+                        </li>
                        
                     </ul>
                     
@@ -77,7 +87,7 @@ https://templatemo.com/tm-559-zay-shop
                     </a>
                     {% if user != None %}
                     <a class="nav-icon position-relative text-decoration-none nav-link" href="{% url 'profile' %}">
-                        <p>HI <span class="fw-bold text-uppercase"><u>{{ user.username }}</u></span></p>
+                         <span class="fw-bold text-uppercase">{{ user.username }}</span>
                     </a>
                     {% else %}
                     <a class="nav-icon position-relative text-decoration-none nav-link" href="{% url 'login' %}">
