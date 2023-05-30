@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from accounts .models import Accounts
+from productapp .models import Catogary,Product
 from django.contrib.auth import authenticate, login, logout
 
 
@@ -41,9 +42,28 @@ def admin_logout(request):
     return render(request,'admin/login.html')
 
 def catogary(request):
-    return render(request,'admin/catogary.html')
+    if 'admin_id' in request.session:
+        item = Catogary.objects.all()
+        return render(request,'admin/catogary.html',{'data': item })
 
 def addcatogary(request):
+    if 'admin_id' in request.session:
+        if request.method =='POST':
+                category_name = str(request.POST['c_name'])
+                category_name = category_name.upper()
+                description   = request.POST['desc']
+                if Catogary.objects.filter(catogary_name = category_name):
+                    messages.error(request,"category alredy exists",extra_tags='categoryerror')
+                    return redirect(addcatogary)
+                elif category_name == "" or description =="":
+                    messages.error(request,"enter values")
+                else:
+                    item = Catogary.objects.create(
+                        catogary_name = category_name,
+                        description = description
+                    )
+                    return redirect(catogary)
+                    
     return render(request,'admin/addcategory.html')
 
 def coupen(request):

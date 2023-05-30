@@ -5,7 +5,7 @@
 	    
     <div class="app-content pt-3 p-md-3 p-lg-4">
         <div class="container mt-3 text-center">
-            <h2>products</h2>
+            <h2>CATEGORY</h2>
             <div class="text-end">
                 <a href="{% url 'addcatogary'%}"><button type="submit" class="btn btn-outline-success btn-lg px-3 mb-2">Add category</button></a>
               </div>
@@ -20,7 +20,14 @@
                 </tr>
               </thead>
               <tbody>
-                
+                {% for i in data %}
+                <tr>
+                  <th>{{ forloop.counter }}</th>
+                  <th scope="col">{{ i.catogary_name}}</th>
+                  <th scope="col-2">{{ i.description}}</th>
+                  <th style="width: 220px;"></th>
+              </tr>
+                {%endfor%}
                
               </tbody>
             </table>

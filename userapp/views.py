@@ -14,7 +14,7 @@ def index(request):
 def profile(request):
     if 'user_id' in request.session:
         user    = request.session['user_id']
-        user_id = Accounts.objects.get(username=user)
+        user_id = Accounts.objects.get(username = user)
         address = CustomerAdress.objects.filter(user = user_id)
         
         context = {
