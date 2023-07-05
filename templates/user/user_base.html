@@ -55,11 +55,18 @@ https://templatemo.com/tm-559-zay-shop
                                 <a class="dropdown-toggle text-decoration-none" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Categories
                                   </a>
-                                <ul class="dropdown-menu"> 
-                                    <li><a class="dropdown-item" href=""></a></li>
+                                <ul class="dropdown-menu">
+                                {% for i in catogary %}
+                                <li><a class="dropdown-item" href="">{{ i.category_name }}</a></li>
+                                {% endfor %}
                                 </ul>
                               </div>
                         </li>
+                        <li class="nav-item">
+                        </li>
+                        <li class="nav-item">
+                        </li> 
+                       
                        
                     </ul>
                     

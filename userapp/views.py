@@ -1,13 +1,19 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from accounts .models import Accounts,CustomerAdress
-from productapp .models import Catogary,Product
+from productapp .models import Category,Product
 from django.contrib.auth import authenticate
 
 
 # Create your views here.
 def index(request):
-    return render(request,'user/user_index.html')
+    category = Category.objects.all()
+    
+
+    context = {
+        'catogary' : category
+    }
+    return render(request,'user/user_index.html',context)
 
 
 
@@ -229,11 +235,12 @@ def profile_edit(request):
                 return render(request,'user/profile_edit.html', {'data' : item})
             
         
-def selectedviews(request,value):
-    catogary = Catogary.objects.all()
+def selectedviews(request):
+
+    category = Category.objects.all()
     
-    
+
     context = {
-        'catogary' : catogary
+        'catogary' : category
     }
-    return render(request,'user/index.html', context)
+    return render(request,'user/index.html',context)

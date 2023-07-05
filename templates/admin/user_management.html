@@ -31,7 +31,6 @@
               </thead>
               <tbody>
                 {% for i in data%}
-                {% if i.is_admin != True %}
                 <tr>
                     <th>{{ forloop.counter }}</th>
                     <th scope="row">{{i.username}}</th>
@@ -98,7 +97,6 @@
                   </tr>
                
               </tbody>
-              {% endif %}
               {% endfor %}
             </table>
 

@@ -7,7 +7,7 @@
         <div class="container mt-3 text-center">
             <h2>CATEGORY</h2>
             <div class="text-end">
-                <a href="{% url 'addcatogary'%}"><button type="submit" class="btn btn-outline-success btn-lg px-3 mb-2">Add category</button></a>
+                <a href="{% url 'addcategory'%}"><button type="submit" class="btn btn-outline-success btn-lg px-3 mb-2">Add category</button></a>
               </div>
                      
             <table class="table table-dark table-hover">
@@ -23,10 +23,33 @@
                 {% for i in data %}
                 <tr>
                   <th>{{ forloop.counter }}</th>
-                  <th scope="col">{{ i.catogary_name}}</th>
+                  <th scope="col">{{ i.category_name}}</th>
                   <th scope="col-2">{{ i.description}}</th>
-                  <th style="width: 220px;"></th>
-              </tr>
+                  <td>
+                    <a href="{% url 'editcategory' i.id%}">
+                        <button type="submit" class="btn btn-outline-primary btn-lg px-3">Edit</button>
+                    </a>
+                    <button type="submit" class="btn btn-outline-danger btn-lg px-3 ms-3" data-bs-toggle="modal" data-bs-target="#deletecategory-{{ i.id }}">Delete</button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="deletecategory-{{ i.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            <p>Do you want to delete {{ i.category_name }}</p>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <a href="{% url 'deletecategory' i.id%}"><button type="button" class="btn btn-danger">Confirm</button></a>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </td>
+                </tr>
                 {%endfor%}
                
               </tbody>
