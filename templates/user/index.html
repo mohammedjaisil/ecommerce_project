@@ -1,0 +1,92 @@
+{% extends 'user/user_base.html' %}
+{% load static %}
+{% block content %}
+<div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="0" class="active"></li>
+        <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="1"></li>
+        <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="container">
+                <div class="row p-5">
+                    <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                        <img class="img-fluid" src="https://www.clippingpathexperts.com/wp-content/uploads/Fashion-photography-Poses-for-men-1.png" alt="">
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="container">
+                <div class="row p-5">
+                    <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                        <img class="img-fluid" src="https://www.clippingpathexperts.com/wp-content/uploads/Fashion-photography-Poses-for-men-8.png" alt="">
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="container">
+                <div class="row p-5">
+                    <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                        <img class="img-fluid" src="https://www.clippingpathexperts.com/wp-content/uploads/Fashion-photography-Poses-for-men-12.png" alt="">
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="prev">
+        <i class="fas fa-chevron-left"></i>
+    </a>
+    <a class="carousel-control-next text-decoration-none w-auto pe-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="next">
+        <i class="fas fa-chevron-right"></i>
+    </a>
+</div>
+
+<section class="container py-5">
+    <div class="row text-center pt-3">
+            
+        
+        <div class="col-lg-6 m-auto">
+            
+            <h1 class="h2">SHOP NOW</h1>
+            
+            
+        </div>
+    </div>
+    {% if data %}
+        <div class="row d-flex justify-content-center">
+            {% for i in data %}
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-6 p-5 mt-3 products-index-items" style="position: relative;">
+                </div>
+                <a href="{% url 'product_deatils' i.id %}"><img src="{{ i.image.url }}" class="img-fluid border p-3"></a>
+                <a href="{% url 'product_deatils' i.id %}" class="text-decoration-none">
+                <span class="h5 mt-3 mb-3 text-dark">{{ i.product_name }}</span><br>
+                {% if i.stock != 0 %}
+                {% if i.product_offer != 0 or i.category.category_offer != 0 %}
+                <span class="h3 text-decoration-none text-dark">₹  {{ i.get_product_price }}</span><br> 
+                {% if i.product_offer > i.category.category_offer %}    
+                <span class="fs-6 text-decoration-none text-secondary"><del>₹  {{ i.price }}</del> ({{ i.product_offer }} % Off)</span>
+                {% else %}
+                <span class="fs-6 text-decoration-none text-secondary"><del>₹  {{ i.price }}</del> ({{ i.category.category_offer }} % Off)</span>
+                {% endif %}
+                {% else %}
+                <span class="h3 text-decoration-none text-dark">₹  {{ i.price }}</span>
+                {% endif %}
+                {% else %}
+                <span class="h3 text-decoration-none text-danger">Out of stock!!</span>
+                {% endif %}
+            {% endfor %}    
+        </div>
+    {% else %}
+        <div>
+            <p>No products available!!</p>
+        </div>
+    {% endif %}
+</section>
+
+{% endblock content%}

@@ -157,12 +157,62 @@ def add_product(request):
         messages.error(request, 'Only admin can access')
         return redirect(admin_login) 
     
+
+    
+def edit_product(request,id):
+    if 'admin_id' in request.session:
+        item = Product.objects.get(id = id)
+        value =Category.objects.all()
+        if request.method == 'POST':
+            product_name = request.POST['p_name']
+            description = request.POST['desc']
+            price = request.POST['price']
+            stock = request.POST['stock']
+            category_name = request.POST['category']
+            brand = request.POST['brand']
+            try:
+                image = request.FILES['uploadFromPC']
+                image1 = request.FILES['uploadFromPC1']
+                image2 = request.FILES['uploadFromPC2']
+            except:
+                print('please add an image!!')
+            if product_name == '' or description =='' or price=='' or stock==''or category_name == '' or brand=='':
+                messages.error(request,'All fields are required')
+                return redirect('admin/edit_product')
+            elif int(price)<0 or int(stock)<0:
+                messages.error(request,'Negative number is not supportted for price and stock', extra_tags='productadderror')
+                return redirect('admin/edit_product')
+            item.product_name = request.POST['p_name']
+            item.description = request.POST['desc']
+            item.price = request.POST['price']
+            item.stock = request.POST['stock']
+            c_name = Category.objects.get(category_name = request.POST['category'])
+            item.category = c_name
+            item.brand = request.POST['brand']
+            item.product_status = request.POST['product_status']
+            try:       
+                item.image = request.FILES['uploadFromPC']
+                item.image1 = request.FILES['uploadFromPC1']
+                item.image2 = request.FILES['uploadFromPC2']
+            except:
+                print('sdsdffdfdf')
+                
+            item.save()
+            return redirect(products)
+        return render(request, 'admin/product_edit.html',{'data':item, 'value':value})
+    else:
+        messages.error(request, 'Only admin can access')
+        return redirect(admin_login)
+
+            
+        
 def delete_product(request,id):
     if 'admin_id' in request.session:
         item = Product.objects.filter(id = id)
         item.delete()
         return redirect(products)
-
+    
+    
 def sales(request):
     return render(request,'admin/sales.html')
 

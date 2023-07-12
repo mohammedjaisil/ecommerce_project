@@ -7,14 +7,20 @@ from django.contrib.auth import authenticate
 
 # Create your views here.
 def index(request):
+    item     = Product.objects.all()
     category = Category.objects.all()
-    
-
-    context = {
-        'catogary' : category
+    context  = {
+        'data':item,
+        'category':category,
     }
-    return render(request,'user/user_index.html',context)
+    return render(request,'user/index.html',context)
 
+
+
+def selectedView(request):
+    
+    
+    return render(request,'user/index.html')
 
 
 def profile(request):
@@ -234,13 +240,8 @@ def profile_edit(request):
             else:
                 return render(request,'user/profile_edit.html', {'data' : item})
             
-        
-def selectedviews(request):
-
-    category = Category.objects.all()
+def product_deatils(request,id):
     
-
-    context = {
-        'catogary' : category
-    }
-    return render(request,'user/index.html',context)
+    item = Product.objects.get(id = id)
+    
+    return render(request,'user/products.html', {'thisProduct' : item})

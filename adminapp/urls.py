@@ -8,6 +8,7 @@ urlpatterns = [
     path('addcategory',views.addcategory,name='addcategory'),
     path('editcategory/<int:id>/',views.edit_category,name='editcategory'),
     path('deletecategory/<int:id>/',views.delete_category,name='deletecategory'),
+    path('edit_product/<int:id>/',views.edit_product,name='edit_product'),
     path('delete_product/<int:id>/',views.delete_product,name='delete_product'),
     path('coupen',views.coupen,name='coupen'),
     path('offer',views.offer,name='offer'),
