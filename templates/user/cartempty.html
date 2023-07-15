@@ -2,10 +2,14 @@
 {% load static %}
 {% block content %}
 
-<div class="container">
-    <h1>Cart</h1>
-    <div class="container">
-        <h3>Cart is empty</h3>
+<div class="container text-center p-5">
+    <h1>CART</h1>
+    <div class="container p-5">
+        <div class="text-center">
+            <h3>Cart is Empty!</h3>
+            <p>Please add a <b>Product</b> to cart</p>
+            <p class=""><a href="{% url 'home' %}" class="btn btn-success">Go Shop</a></p>
+        </div>
     </div>
 
 

@@ -3,10 +3,10 @@
 {% block content %}
 
 <section class="">
-    <div class="container pb-5 d-flex">
+    <div class="container pb-5 d-flex ">
         <div class="row justify-content-center">
             <div class="col-lg-5 mt-5 ">
-                <div class="card" id="div-card" style="width: 28rem; height: 24rem;">
+                <div class="card " id="div-card" style="width: 28rem; height: 24rem;">
                     <div id="main_image" class="pt-5">
                         <img src="{{ thisProduct.image.url }}" alt="Card image cap" id="product-detail">
                     </div>
@@ -89,7 +89,7 @@
                         </ul>
                         <h6>Description:</h6>
                         <p>{{ thisProduct.description|slice:100 }} ...</p>
-                        <form action="" method="post">
+                        <form action="{% url 'cartadd' %}" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="product-title" value="Activewear">
                             <div class="row">

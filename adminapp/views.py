@@ -159,7 +159,7 @@ def add_product(request):
     
 
     
-def edit_product(request,id):
+def product_edit(request,id):
     if 'admin_id' in request.session:
         item = Product.objects.get(id = id)
         value =Category.objects.all()
@@ -176,12 +176,15 @@ def edit_product(request,id):
                 image2 = request.FILES['uploadFromPC2']
             except:
                 print('please add an image!!')
-            if product_name == '' or description =='' or price=='' or stock==''or category_name == '' or brand=='':
+            if  brand=='':
                 messages.error(request,'All fields are required')
-                return redirect('admin/edit_product')
+                return redirect('/admin/edit_product/'+str(id))
+            if product_name == '' or description =='' or price=='' or stock==''or category_name == '' or brand=='':
+                messages.error(request,'All fields are required', extra_tags='productadderror')
+                return redirect('/admin/edit_product/'+str(id))
             elif int(price)<0 or int(stock)<0:
                 messages.error(request,'Negative number is not supportted for price and stock', extra_tags='productadderror')
-                return redirect('admin/edit_product')
+                return redirect('/admin/edit_product/'+str(id))
             item.product_name = request.POST['p_name']
             item.description = request.POST['desc']
             item.price = request.POST['price']

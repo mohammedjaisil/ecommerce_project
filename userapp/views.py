@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from accounts .models import Accounts,CustomerAdress
-from productapp .models import Category,Product
+from productapp .models import Category,Product,CartItem,Order
 from django.contrib.auth import authenticate
 
 
@@ -20,7 +20,7 @@ def index(request):
 def selectedView(request):
     
     
-    return render(request,'user/index.html')
+    return render(request,'user/user_base.html')
 
 
 def profile(request):
@@ -189,11 +189,89 @@ def delete_address(request,id):
     return redirect(profile)
 
 def cart(request):
-    return render(request,'user/cart.html')
+    if 'user_id' in request.session:
+        user     = request.session.get('user_id')
+        order_qs = Order.objects.filter(user__username = user, orderd=False).order_by('date_ordered')
+        cart_qs  = CartItem.objects.filter(user__username = user)
+        if order_qs.exists() and cart_qs.exists():
+            order_object = order_qs[0]
+        else:
+            return render(request,'user/cartempty.html')
+        context = {
+            'order_object' : order_object
+        }
+    else:
+        user     = request.session.session_key
+        order_qs = Order.objects.filter(guest_user = user, orderd=False).order_by('date_ordered')
+        cart_qs  = CartItem.objects.filter(guest_user = user)
+        if order_qs.exists() and cart_qs.exists():
+            order_object = order_qs[0]
+        else:
+            return render(request,'user/cartempty.html')
+        context = {
+            'order_object' : order_object
+        }
+    return render(request,'user/cart.html', context)
 
+def cartadd(request):
+    if 'user_id' in request.session:
+        product_id   = request.POST.get('product-id')
+        quantity     = int(request.POST.get('product-quantity'))
+        product_var  = Product.objects.get(id = product_id)
+        user         = request.session.get('user_id')
+        item         = Accounts.objects.get(username =user)
+        id           = item.id
+        Order_qs     = Order.objects.filter(user_id = id ,orderd = False)
+        if Order_qs.exists():
+            order = Order_qs[0]
+            if order.items.filter(user_id = id ,product = product_var).exists():
+                order_item         =order.items.get(user_id = id, product =product_var)
+                order_item.quantity += quantity
+                order_item.save()
+                return redirect('/product_deatils/'+str(product_id))
+            else:
+                order_item = CartItem.objects.create(user_id=id, product = product_var, quantity=quantity)
+                order.items.add(order_item)
+                order.save()
+                return redirect('/product_deatils/'+str(product_id))
+            
+        else:
+            order      = Order.objects.create(user_id=id)
+            order_item = CartItem.objects.create(user_id=id, product=product_var, quantity=quantity)
+            order.items.add(order_item)
+            order.save()
+            return redirect('/product_deatils/'+str(product_id))
+    else:
+        product_id   = request.POST.get('product-id')
+        quantity     = int(request.POST.get('product-quantity'))
+        product_var  = Product.objects.get(id = product_id)
+        id           = request.session.session_key
+        order_qs     = Order.objects.filter(guest_user= id, orderd = False)
+        if order_qs.exists():
+            order = order_qs[0]
+            if order.items.filter( guest_user=id, product=product_var).exists():
+                order_item           = order.items.get( guest_user=id, product=product_var)
+                order_item.quantity += quantity
+                order_item.save()
+                return redirect('/product_deatils/'+str(product_id))
+            else:
+                order_item = CartItem.objects.create(guest_user=id, product = product_var, quantity=quantity)
+                order.items.add(order_item)
+                order.save()       
+                return redirect('/product_deatils/'+str(product_id))
+        else:
+            order      = Order.objects.create(guest_user=id)
+            order_item = CartItem.objects.create(guest_user=id, product=product_var, quantity=quantity)
+            order.items.add(order_item)
+            order.save()
+            return redirect('/product_deatils/'+str(product_id))
 
-def cartempty(request):
-    return render(request,'user/cartempty.html')
+        
+
+def deleteFromCart(request,id):
+    item = CartItem.objects.get( id = id)
+    item.delete()
+    return redirect(cart)
 
 def otp_login(request):
     # item = Accounts.objects.filter(first_name='abcd')
@@ -245,3 +323,7 @@ def product_deatils(request,id):
     item = Product.objects.get(id = id)
     
     return render(request,'user/products.html', {'thisProduct' : item})
+
+def checkout(request):
+    
+    return render(request,'user/checkout.html')

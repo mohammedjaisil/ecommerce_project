@@ -42,9 +42,7 @@
                             <input type="text" class="form-control mt-1" id="brand" name="brand" placeholder="brand" value="{{ data.brand }}">
                         </div>
                         {% for message in messages %}
-                        {% if "productediterror" in message.tags %}
                         <p><span class="text-danger">{{message}}</span></p>
-                        {%endif%} 
                         {%endfor%} 
                         <div class="form-group my-3">
                             <label for="input_product_status" class="fw-bold">product_status</label>
@@ -67,11 +65,9 @@
                         <span class="imageupload">Image3 : </span> <input type="file" class="form-control my-1" name="uploadFromPC2"
                             id="id_product_image2">
                     </div>
-                    {% if "productediterror" not in messages.tags %}
                     {% for message in messages %}
                     <p><span class="text-danger">{{message}}</span></p>
                     {%endfor%}
-                    {% endif %}
                     <div class="col-md-12 text-center mt-3">
                         <button type="submit"  id="confirm-btn" class="btn btn-success btn-lg px-6">Submit</button>
                     </div>
