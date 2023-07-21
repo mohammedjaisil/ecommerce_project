@@ -1,26 +1,59 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from accounts .models import Accounts,CustomerAdress
-from productapp .models import Category,Product,CartItem,Order
+from productapp .models import Category,Product,CartItem,Order,MyWishList
 from django.contrib.auth import authenticate
 
 
 # Create your views here.
 def index(request):
-    item     = Product.objects.all()
-    category = Category.objects.all()
-    context  = {
-        'data':item,
-        'category':category,
-    }
+    if not request.session.session_key:
+        request.session.save()
+    if 'user_id' in request.session:
+        item        = Product.objects.all().order_by("id")
+        category    = Category.objects.all()
+        user        = Accounts.object.get(username = request.session['user_id'])
+        wish        = MyWishList.objects.filter(username = user.id)
+        wishlist    = []
+        for i in wish:
+            wishlist.append(i.product.product_name)
+        context  = {
+            'data':item,
+            'category':category,
+            'wishlist':wishlist
+        }
+    else:
+        item        = Product.objects.all().order_by("id")
+        wishlist  = []
+        context     = {
+                'data':item,
+                'wishlist':wishlist
+            }
+        
+    
     return render(request,'user/index.html',context)
 
 
 
-def selectedView(request):
-    
-    
-    return render(request,'user/user_base.html')
+def selectedView(request,value):
+    category = Category.objects.get(category_name = value)
+    selected = category.category_name
+    item     = Product.objects.filter(category = category.id).order_by("id")
+    category = Category.objects.all()
+    wishlist = []
+    if 'user_id' in request.session:
+        user      = Accounts.object.get(username = request.session['user_id'])
+        wish      = MyWishList.objects.filter(username = user.id)
+        for i in wish:
+            wishlist.append(i.product.product_name)
+        print(wishlist)
+    context  = {
+        'data':item,
+        'category':category,
+        'selected':selected,
+        'wishlist':wishlist
+    }
+    return render(request, 'user/index.html',context)
 
 
 def profile(request):
@@ -36,6 +69,8 @@ def profile(request):
     else:
         context = None
     return render(request,'user/profile.html',context)
+
+
 
 def login(request):
     if 'user_id'in request.session:
@@ -126,38 +161,85 @@ def signup(request):
 
 
 def add_address(request):
-    if request.method == "POST":
-        user         = request.session.get('user_id')
-        first_name   = request.POST['first_name']
-        last_name    = request.POST['last_name']
-        email        = request.POST['email']
-        phone_number = request.POST['phone_number']
-        house_name   = request.POST['house_name']
-        state        = "Kerala"
-        country      = "India"
-        street_name  = request.POST['street_name']
-        city         = request.POST['city']
-        post_code    = request.POST['post_code']
+    if 'user_id' in request.session:
+        if request.method == "POST":
+            user         = request.session.get('user_id')
+            first_name   = request.POST['first_name']
+            last_name    = request.POST['last_name']
+            email        = request.POST['email']
+            phone_number = request.POST['phone_number']
+            house_name   = request.POST['house_name']
+            state        = "Kerala"
+            country      = "India"
+            street_name  = request.POST['street_name']
+            city         = request.POST['city']
+            post_code    = request.POST['post_code']
+            
+            item = CustomerAdress.objects.create(
+                first_name   = first_name,
+                last_name    = last_name,
+                email        = email,
+                phone_number = phone_number,
+                house_name   = house_name,
+                state        = state,
+                country      = country,
+                street_name  = street_name,
+                city         = city,
+                post_code    = post_code
+            )
+            
+            item.user = Accounts.objects.get(username =user)   
+            item.save()
+            return redirect(profile)   
         
-        item = CustomerAdress.objects.create(
-            first_name   = first_name,
-            last_name    = last_name,
-            email        = email,
-            phone_number = phone_number,
-            house_name   = house_name,
-            state        = state,
-            country      = country,
-            street_name  = street_name,
-            city         = city,
-            post_code    = post_code
-        )
-        
-        item.user = Accounts.objects.get(username =user)   
-        item.save()
-        return redirect(profile)   
-        
-        
-    
+    else :
+        if request.method == "POST":
+            user         = request.session.session_key
+            order_qs     = Accounts.objects.filter(guest_user = user)
+            first_name   = request.POST.get('first_name')
+            last_name    = request.POST.get('last_name')
+            email        = request.POST.get('email')
+            phone_number = request.POST.get('phone_number')
+            house_name   = request.POST.get('house_name')
+            state        = "Kerala"
+            country      = "India"
+            street_name  = request.POST.get('street_name')
+            city         = request.POST.get('city')
+            post_code    = request.POST.get('post_code')
+            if order_qs.exists():
+                item = CustomerAdress.objects.create(
+                    first_name   = first_name,
+                    last_name    = last_name,
+                    email        = email,
+                    phone_number = phone_number,
+                    house_name   = house_name,
+                    state        = state,
+                    country      = country,
+                    street_name  = street_name,
+                    city         = city,
+                    post_code    = post_code,
+                    guest_user   = user
+                )
+                item.save()
+                return redirect(checkout) 
+            else:
+                order_qs = Accounts.objects.create(guest_user = user)
+                item = CustomerAdress.objects.create(
+                    first_name   = first_name,
+                    last_name    = last_name,
+                    email        = email,
+                    phone_number = phone_number,
+                    house_name   = house_name,
+                    state        = state,
+                    country      = country,
+                    street_name  = street_name,
+                    city         = city,
+                    post_code    = post_code,
+                
+                )
+                item.user = Accounts.objects.get(guest_user = user)  
+                item.save()
+                return redirect(checkout) 
     return render(request,'user/addaddress.html')
 
 def edit_address(request,id):
@@ -184,10 +266,16 @@ def edit_address(request,id):
 
 
 def delete_address(request,id):
-    item = CustomerAdress.objects.get(id = id)
-    item.delete()
-    return redirect(profile)
-
+    if 'user_id' in request.session:
+        item = CustomerAdress.objects.get(id = id)
+        item.delete()
+        return redirect(profile)
+    else:
+        item = CustomerAdress.objects.get(id = id)
+        item.delete()
+        return redirect(checkout)
+    
+    
 def cart(request):
     if 'user_id' in request.session:
         user     = request.session.get('user_id')
@@ -212,6 +300,77 @@ def cart(request):
             'order_object' : order_object
         }
     return render(request,'user/cart.html', context)
+
+def checkout(request):
+    if 'user_id' in request.session:
+        user    = request.session['user_id']
+        user_id = Accounts.objects.get(username = user)
+        address = CustomerAdress.objects.filter(user = user_id)
+        order_qs = Order.objects.filter(user__username = user, orderd=False).order_by('date_ordered')
+        cart_qs  = CartItem.objects.filter(user__username = user)
+        if order_qs.exists() and cart_qs.exists():
+            order_object = order_qs[0]
+        else:
+            return render(request,'user/cartempty.html')
+        if order_qs.exists():
+            order = order_qs[0]
+        else:
+            order= Order.objects.create(user_id=user_id.id)
+        if order_qs.exists():
+            orders       = order_qs[0]
+            total_amount = float(orders.total_amount_cart)
+            tax          = (total_amount) * 3 /100
+
+            
+                
+            grand_total = float(total_amount) + float(tax)
+            grand_total = "{:.1f}".format(grand_total)
+            grand_total = float(grand_total)
+        else:
+            messages.error(request, 'Please add an product',extra_tags='ordererror')
+            return render(request,'user/cartempty.html')
+        context = {
+            'address' : address,
+            'order_object' : order_object,
+            'order' : order,
+            'cart':cart_qs,
+            'grand_total' :grand_total,
+        }
+        
+    else:
+        user     = request.session.session_key
+        address = CustomerAdress.objects.filter(guest_user = user)
+        order_qs = Order.objects.filter(guest_user = user, orderd=False).order_by('date_ordered')
+        cart_qs  = CartItem.objects.filter(guest_user = user)
+        if order_qs.exists() and cart_qs.exists():
+            order_object = order_qs[0]
+        else:
+            return render(request,'user/cartempty.html')
+        if order_qs.exists():
+            order = order_qs[0]
+        else:
+            order= Order.objects.create(user_id=user_id.id)
+        if order_qs.exists():
+            orders       = order_qs[0]
+            total_amount = float(orders.total_amount_cart)
+            tax          = (total_amount) * 3 /100
+
+            
+                
+            grand_total = float(total_amount) + float(tax)
+            grand_total = "{:.1f}".format(grand_total)
+            grand_total = float(grand_total)
+        else:
+            messages.error(request, 'Please add an product',extra_tags='ordererror')
+            return render(request,'user/cartempty.html')
+        context = {
+            'order_object' : order_object,
+            'order' : order,                
+            'address' : address,
+            'cart':cart_qs,
+            'grand_total' :grand_total,        }
+    return render(request,'user/checkout.html',context)
+
 
 def cartadd(request):
     if 'user_id' in request.session:
@@ -323,7 +482,52 @@ def product_deatils(request,id):
     item = Product.objects.get(id = id)
     
     return render(request,'user/products.html', {'thisProduct' : item})
-
-def checkout(request):
+def wishlist(request):
+    if 'user_id' in request.session:
+        user = Accounts.objects.get(username = request.session.get('user_id'))
+        item = MyWishList.objects.filter(username = user.id)
+        
+        context = {
+            'data':item
+        }
+        return render(request,'user/whishlist.html',context)
+    else:
+        messages.error(request,'login requiered')
+        return redirect(login)
     
-    return render(request,'user/checkout.html')
+    
+    
+    
+
+def wishlistadd(request, id):
+    if 'user_id' in request.session:
+        user     = request.session.get('user_id')
+        user     = Accounts.object.get(username = user)
+        product  = Product.objects.get(id = id)
+        if MyWishList.objects.filter(username_id = user.id,product_id = product.id):
+            return redirect(index)
+        if MyWishList.objects.filter(id=product.id).exists():
+            return redirect(index)
+        else:
+            item = MyWishList.objects.create(username_id = user.id,product_id = product.id )
+            item.save()
+            return redirect(index)
+    else:
+        messages.error(request, 'Login is required')
+        return redirect(login)
+
+
+
+def wishlistdelete(request,id):
+    if 'user_id' in request.session:
+        user     = request.session.get('user_id')
+        user     = Accounts.object.get(username = user)
+        item     = MyWishList.objects.get(username = user.id , product = id)
+        item.delete()
+        return redirect(index)
+
+    else:
+        messages.error(request, 'Login is required')
+        return redirect(login)
+
+        

@@ -37,6 +37,17 @@ class Product(models.Model):
     class meta:
         verbose_name        = 'product'
         verbose_name_plural = 'products'
+ 
+    @property
+    def get_product_price(self):
+        if self.product_offer == 0 and self.category.category_offer==0:
+            product_price = self.price
+        elif self.product_offer < self.category.category_offer:
+            product_price = self.price - float((self.price * self.category.category_offer)/100)
+        else:
+            product_price = self.price - float((self.price * self.product_offer)/100)
+        product_price = float(product_price)
+        return product_price
     
     
     
@@ -51,6 +62,14 @@ class CartItem(models.Model):
     cancel_status = models.BooleanField(default=False, null=True, blank=True)
     reason          = models.CharField(max_length=255,null= True,blank = True)
 
+    
+    def __str__(self):
+        return f"{self.quantity} of {self.product}"
+
+
+    @property
+    def get_item_price(self):
+        return self.quantity * self.product.get_product_price
 
     
 
@@ -80,11 +99,30 @@ class Order(models.Model):
     returnexpiry    = models.BooleanField(default=True,null=True, blank=True)
     reason          = models.CharField(max_length=255,null= True,blank = True)
     discount        = models.CharField(max_length=255,null= True,blank = True, default = "0")
+    
+    
+    
+    def __str__(self):
+         return str(self.user)
+
+
+    @property 
+    def total_amount_cart(self):
+        total = 0
+        for item in self.items.all():
+            total += item.get_item_price
+        return total
+
+
+    @property
+    def get_tax(self):
+        tax = (self.total_amount_cart * 3)/100
+        return tax
    
    
    
 class MyWishList(models.Model):
-    username         = models.ForeignKey(Accounts,on_delete= models.CASCADE, null= True ,blank = True) 
+    username    = models.ForeignKey(Accounts,on_delete= models.CASCADE, null= True ,blank = True) 
     product     = models.ForeignKey(Product,on_delete= models.CASCADE, null= True ,blank = True)
     def __str__(self):
          return str(self.username)

@@ -57,7 +57,7 @@ https://templatemo.com/tm-559-zay-shop
                                   </a>
                                 <ul class="dropdown-menu">
                                 {% for i in category %}
-                                <li><a class="dropdown-item" href="">{{ i.category_name }}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'categoryfilter' i.category_name %}">{{ i.category_name }}</a></li>
                                 {% endfor %}
                                 </ul>
                               </div>
@@ -88,9 +88,9 @@ https://templatemo.com/tm-559-zay-shop
                         <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
                         <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">{{ cart_count }}</span>
                     </a>
-                    <a class="nav-icon position-relative text-decoration-none" href="#">
+                    <a class="nav-icon position-relative text-decoration-none" href="{% url 'wishlist' %}">
                         <i class="fa fa-fw fa-user text-dark mr-3"></i>
-                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">+99</span>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">{{ wishlist_count }}</span>
                     </a>
                     {% if user != None %}
                     <a class="nav-icon position-relative text-decoration-none nav-link" href="{% url 'profile' %}">
@@ -144,19 +144,19 @@ https://templatemo.com/tm-559-zay-shop
             <div class="row">
 
                 <div class="col-md-4 pt-5">
-                    <h2 class="h2 text-success border-bottom pb-3 border-light logo">Zay Shop</h2>
+                    <h2 class="h2 text-success border-bottom pb-3 border-light logo">Mob Factory</h2>
                     <ul class="list-unstyled text-light footer-link-list">
                         <li>
                             <i class="fas fa-map-marker-alt fa-fw"></i>
-                            123 Consectetur at ligula 10660
+                            edappal,kerala,india
                         </li>
                         <li>
                             <i class="fa fa-phone fa-fw"></i>
-                            <a class="text-decoration-none" href="tel:010-020-0340">010-020-0340</a>
+                            <a class="text-decoration-none" href="tel:010-020-0340">8547489081</a>
                         </li>
                         <li>
                             <i class="fa fa-envelope fa-fw"></i>
-                            <a class="text-decoration-none" href="mailto:info@company.com">info@company.com</a>
+                            <a class="text-decoration-none" href="mailto:info@company.com">mobfactory@gmail.com</a>
                         </li>
                     </ul>
                 </div>
@@ -191,13 +191,7 @@ https://templatemo.com/tm-559-zay-shop
                         </li>
                     </ul>
                 </div>
-                <div class="col-auto">
-                    <label class="sr-only" for="subscribeEmail">Email address</label>
-                    <div class="input-group mb-2">
-                        <input type="text" class="form-control bg-dark border-light" id="subscribeEmail" placeholder="Email address">
-                        <div class="input-group-text btn-success text-light">Subscribe</div>
-                    </div>
-                </div>
+                
             </div>
         </div>
 
@@ -206,8 +200,8 @@ https://templatemo.com/tm-559-zay-shop
                 <div class="row pt-2">
                     <div class="col-12">
                         <p class="text-left text-light">
-                            Copyright &copy; 2021 Company Name 
-                            | Designed by <a rel="sponsored" href="https://templatemo.com" target="_blank">TemplateMo</a>
+                            Copyright &copy; 2021 Mob Factory 
+                            | Designed by <a rel="sponsored" href="" target="_blank">mohammed jaisil</a>
                         </p>
                     </div>
                 </div>

@@ -44,6 +44,8 @@ class Accounts(AbstractUser):
     username   = models.CharField(max_length=50, unique=True)
     email      = models.EmailField(unique=True,max_length=200)
     phone      = models.CharField(max_length=15,unique=True)
+    guest_user = models.CharField(max_length=200,null=True, blank=True)
+
 
 
 #required
@@ -73,16 +75,17 @@ class Accounts(AbstractUser):
     
 class CustomerAdress(models.Model):
     user           = models.ForeignKey(Accounts,on_delete=models.CASCADE,null = True)
-    first_name       = models.CharField(max_length=200)
-    last_name       = models.CharField(max_length=200)
-    email            = models.EmailField( max_length=254)
-    phone_number    = models.CharField(max_length=99)
-    house_name      = models.CharField(max_length=200, null = True)
-    street_name      = models.CharField(max_length=200, null = True)
-    city            = models.CharField(max_length=200, null = True)
-    state           = models.CharField(max_length=200, null = True)
-    country         = models.CharField(max_length=200, null = True)
-    post_code       = models.IntegerField( null = True)
+    guest_user     = models.CharField(max_length=200,null=True, blank=True)
+    first_name     = models.CharField(max_length=200)
+    last_name      = models.CharField(max_length=200)
+    email          = models.EmailField( max_length=254)
+    phone_number   = models.CharField(max_length=99)
+    house_name     = models.CharField(max_length=200, null = True)
+    street_name    = models.CharField(max_length=200, null = True)
+    city           = models.CharField(max_length=200, null = True)
+    state          = models.CharField(max_length=200, null = True)
+    country        = models.CharField(max_length=200, null = True)
+    post_code      = models.IntegerField( null = True)
 
 
     def __str__(self):
