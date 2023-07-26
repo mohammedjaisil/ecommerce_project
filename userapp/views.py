@@ -266,14 +266,10 @@ def edit_address(request,id):
 
 
 def delete_address(request,id):
-    if 'user_id' in request.session:
         item = CustomerAdress.objects.get(id = id)
         item.delete()
         return redirect(profile)
-    else:
-        item = CustomerAdress.objects.get(id = id)
-        item.delete()
-        return redirect(checkout)
+
     
     
 def cart(request):
@@ -530,4 +526,8 @@ def wishlistdelete(request,id):
         messages.error(request, 'Login is required')
         return redirect(login)
 
-        
+
+
+def payment(request):
+    
+    return render(request,'user/payment.html')

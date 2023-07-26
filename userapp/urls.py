@@ -8,7 +8,7 @@ urlpatterns = [
     path('cart',views.cart,name='cart'),
     path('cartadd',views.cartadd,name='cartadd'),
     path('otp_login',views.otp_login,name='otp_login'),
-    path('profile/',views.profile,name='profile'),
+    path('profile',views.profile,name='profile'),
     path('logout',views.logout,name='logout'),
     path('add_address',views.add_address,name='add_address'),
     path('deleteaddress/<int:id>',views.delete_address,name='deleteaddress'),
@@ -20,5 +20,7 @@ urlpatterns = [
     path('wishlist',views.wishlist,name='wishlist'),
     path('wishlistadd/<int:id>',views.wishlistadd,name='wishlistadd'),
     path('wishlistdelete/<int:id>',views.wishlistdelete,name='wishlistdelete'),
+    path('payment',views.payment,name='payment'),
+
 
 ]
