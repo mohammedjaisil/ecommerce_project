@@ -531,3 +531,26 @@ def wishlistdelete(request,id):
 def payment(request):
     
     return render(request,'user/payment.html')
+
+
+def sortwithprice(request, value, category):
+    wishlist  = []
+    selected = None
+    if Category.objects.filter(category_name=category) and value == 'hightolow':
+        category = Category.objects.get(category_name = category)
+        selected = category.category_name
+        item     = Product.objects.filter(category = category.id).order_by("-price")
+    elif Category.objects.filter(category_name=category) and value == 'lowtohigh':
+        category = Category.objects.get(category_name = category)
+        selected = category.category_name
+        item     = Product.objects.filter(category = category.id).order_by("price")
+    elif value == 'hightolow':
+        item     = Product.objects.all().order_by("-price")
+    else:
+        item     = Product.objects.all().order_by("price")
+    context = {
+        'data':item,
+        'selected':selected,
+        'wishlist':wishlist
+    }
+    return render(request, 'user/index.html',context)

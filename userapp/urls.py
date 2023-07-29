@@ -21,6 +21,8 @@ urlpatterns = [
     path('wishlistadd/<int:id>',views.wishlistadd,name='wishlistadd'),
     path('wishlistdelete/<int:id>',views.wishlistdelete,name='wishlistdelete'),
     path('payment',views.payment,name='payment'),
+    path('sortwithprice/<str:value>/<str:category>',views.sortwithprice,name='sortwithprice'),
+
 
 
 ]

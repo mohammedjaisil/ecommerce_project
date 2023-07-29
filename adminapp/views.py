@@ -89,15 +89,6 @@ def edit_category(request,id):
         else:
             return render(request, 'admin/editcategory.html', {'data':item})
 
-def coupen(request):
-    return render(request,'admin/coupen.html')
-
-
-def offer(request):
-    return render(request,'admin/offer.html')
-
-def order(request):
-    return render(request,'admin/order.html')
 
 def products(request):
     if 'admin_id' in request.session:
@@ -216,8 +207,7 @@ def delete_product(request,id):
         return redirect(products)
     
     
-def sales(request):
-    return render(request,'admin/sales.html')
+
 
 def user_management(request):
     if 'admin_id' in request.session:
@@ -231,3 +221,69 @@ def blockuser(request,id):
         item.is_active = True
     item.save()
     return redirect(user_management)
+
+def sales(request):
+    return render(request,'admin/sales.html')
+
+
+
+def coupen(request):
+    return render(request,'admin/coupen.html')
+
+
+def categoryoffer(request):
+    if 'admin_id' in request.session:
+        item = Category.objects.all().order_by("id")
+        return render(request, 'admin/categoryoffer.html',{'data':item})
+    else:
+        messages.error(request, 'Only admin can access')
+        return redirect(admin_login)
+    
+def editcategoryoffer(request, id):
+    if 'admin_id' in request.session:
+        item = Category.objects.get(id=id)
+        if request.method == 'POST':
+            if request.POST['category_offer'] == '' or len(request.POST['category_offer']) > 2 or int(request.POST['category_offer'])>70:
+                messages.error(request,'Categoryoffer is not valid!! and must be below 70%', extra_tags='categoryerror')
+                return render(request, 'admin/categoryofferedit.html', {'data':item})
+            else:
+                item.category_offer = request.POST['category_offer']
+                item.save()
+                return redirect(categoryoffer)
+        return render(request, 'admin/editcategoryoffer.html',{'data':item})
+    else:
+        messages.error(request, 'Only admin can access')
+        return redirect(admin_login)
+def deletecategoryoffer(request,id):
+    item               = Category.objects.get(id=id)
+    item.category_offer = 0
+    item.save()
+    return redirect(categoryoffer)
+        
+        
+def addcategoryoffer(request):
+    categories = Category.objects.all()
+    if 'admin_id' in request.session:
+        if request.method == 'POST':
+            print(request.POST['category_name'])
+            if request.POST['category_offer'] == '' or len(request.POST['category_offer']) > 2 or int(request.POST['category_offer'])>70:
+                messages.error(request,'Category offer is not valid!! and must be below 70%', extra_tags='categoryadderror')
+                return redirect(addcategoryoffer)
+            elif request.POST['category_name'] == 'Select One':
+                messages.error(request,'Please select a  category', extra_tags='categoryadderror')
+                return redirect(addcategoryoffer)
+            category            = request.POST['category_name']
+            offer               = request.POST['category_offer']
+            item                = Category.objects.get(category_name = category)
+            item.category_offer = offer
+            item.save()
+            return redirect(categoryoffer)
+        context = {
+            'value':categories
+        }
+        return render(request, 'admin/addcategoryoffer.html',context)
+    else:
+        messages.error(request, 'Only admin can access')
+        return redirect(admin_login)
+def order(request):
+    return render(request,'admin/order.html')

@@ -126,3 +126,22 @@ class MyWishList(models.Model):
     product     = models.ForeignKey(Product,on_delete= models.CASCADE, null= True ,blank = True)
     def __str__(self):
          return str(self.username)
+     
+     
+class Coupen(models.Model):
+    coupencode   = models.CharField( max_length=20, null = True,blank = True)
+    coupen_offer = models.IntegerField(null = True,blank=True,default=0)
+    is_active    = models.BooleanField(null=True, blank=True, default=True)
+    expiry_date  = models.DateField(null=True, blank=True)
+    users        = models.ManyToManyField(Accounts, blank=True)
+    
+    
+    def __str__(self):
+        return str(self.coupencode)
+
+
+@property
+def get_coupen_offer_price(self):
+    coupen_price = self.price - self.coupen_offer
+    return coupen_price
+
